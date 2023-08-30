@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:dev.db"
+}
+
+model docente {
+  id_docente Int @id @default(autoincrement())
+  nombre String
+  apellido String
+  telefono String
+  carnet String @unique
+  password String
+  materias materia[]
+}
+
+model materia{
+  id_materia Int @id @default(autoincrement())
+  nombre String
+  docenteEncargado docente @relation(fields: [id_docente],references: [id_docente])
+  id_docente Int
+  ciclos ciclo[]
+}
+
+model alumno{
+  id_alumno Int @id @default(autoincrement())
+  nombre String
+  apellido String
+  telefono String
+  carnet String @unique
+  password String
+  periodos periodo[]
+}
+
+model periodo {
+  id_periodo Int @id @default(autoincrement())
+  comentario String
+  promedio Decimal
+  parcial Decimal
+  actividad1 Decimal
+  actividad2 Decimal
+  alumnoP alumno @relation(fields: [id_alumno],references: [id_alumno])
+  id_alumno Int
+  ciclos ciclo @relation(fields: [id_ciclo], references: [id_ciclo])
+  id_ciclo Int
+}
+
+model ciclo {
+  id_ciclo Int @id @default(autoincrement())
+  promedio_ciclo Decimal
+  materiaAsignada materia @relation(fields: [id_materia],references: [id_materia])
+  
+  
+  periodos periodo[]
+  
+  
+  id_materia Int
+}
